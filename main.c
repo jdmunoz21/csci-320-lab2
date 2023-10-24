@@ -45,7 +45,7 @@ int main(int argc, char** argv)
     
     // TODO: call ipc_create to create shared memory region to which parent
     //       child have access.
-
+    ipc_create(argc);
     /* fork a child process */
     pid = fork();
 
@@ -57,7 +57,7 @@ int main(int argc, char** argv)
         // TODO: use gettimeofday to log the start time
         gettimeofday(&start_time, NULL);
         // TODO: write the time to the IPC
-        
+        ipc_open(start_time);
         // TODO: get the list of arguments to be used in execvp() and 
         // execute execvp()
         get_arguments(command, command_args);
@@ -70,7 +70,7 @@ int main(int argc, char** argv)
         // TODO: get the current time using gettimeofday
         gettimeofday(&current_time, NULL);
         // TODO: read the start time from IPC
-        
+        ipc_read();
         // TODO: close IPC
         ipc_close();
         // NOTE: DO NOT ALTER THE LINE BELOW.
