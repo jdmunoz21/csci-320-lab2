@@ -1,4 +1,7 @@
 // TODO: add the appropriate head files here
+#include <stdio.h>
+#include <sys/time.h>
+#include <unistd.h>
 
 /************************************************************\
  * get_arguments - returns the command line arguments not
@@ -51,19 +54,20 @@ int main(int argc, char** argv)
     }
     else if (pid == 0) { /*child process */
         // TODO: use gettimeofday to log the start time
-
+        gettimeofday(&start_time, NULL);
         // TODO: write the time to the IPC
         
         // TODO: get the list of arguments to be used in execvp() and 
         // execute execvp()
-
+        get_arguments(command, command_args);
+        execvp(command, command_args);
     }
     else { /* parent process */
         // TODO: have parent wait and get status of child.
         //       Use the variable status to store status of child. 
         
         // TODO: get the current time using gettimeofday
-        
+        gettimeofday(&current_time, NULL);
         // TODO: read the start time from IPC
         
         // TODO: close IPC
