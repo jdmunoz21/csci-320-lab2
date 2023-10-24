@@ -1,6 +1,7 @@
 // TODO: add the appropriate head files here
 #include <stdio.h>
 #include <sys/time.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 /************************************************************\
@@ -65,13 +66,13 @@ int main(int argc, char** argv)
     else { /* parent process */
         // TODO: have parent wait and get status of child.
         //       Use the variable status to store status of child. 
-        
+        wait(NULL);
         // TODO: get the current time using gettimeofday
         gettimeofday(&current_time, NULL);
         // TODO: read the start time from IPC
         
         // TODO: close IPC
-
+        ipc_close();
         // NOTE: DO NOT ALTER THE LINE BELOW.
         printf("Elapsed time %.5f\n",elapsed_time(&start_time, &current_time));
     }
