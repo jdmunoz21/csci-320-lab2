@@ -1,8 +1,11 @@
 // TODO: add the appropriate head files here
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include "lab2.h"
+#include <string.h>
 
 /************************************************************\
  * get_arguments - returns the command line arguments not
@@ -31,7 +34,7 @@ char** get_arguments(int argc, char** argv){
 int main(int argc, char** argv)
 {
     pid_t pid;
-    int status;
+    int status = 1;
     char* command = NULL;
     char** command_args = NULL;
     char* ipc_ptr = NULL; // pointer to shared memory
@@ -45,7 +48,7 @@ int main(int argc, char** argv)
     
     // TODO: call ipc_create to create shared memory region to which parent
     //       child have access.
-    ipc_create(argc);
+    ipc_ptr = ipc_create(sizeof(start_time));
     /* fork a child process */
     pid = fork();
 
@@ -57,20 +60,21 @@ int main(int argc, char** argv)
         // TODO: use gettimeofday to log the start time
         gettimeofday(&start_time, NULL);
         // TODO: write the time to the IPC
-        ipc_open(start_time);
+        memcpy(ipc_ptr, &start_time, sizeof(start_time));
         // TODO: get the list of arguments to be used in execvp() and 
         // execute execvp()
-        get_arguments(command, command_args);
+        command_args = get_arguments(argc, argv);
         execvp(command, command_args);
     }
     else { /* parent process */
         // TODO: have parent wait and get status of child.
         //       Use the variable status to store status of child. 
+        status = 0;
         wait(NULL);
         // TODO: get the current time using gettimeofday
         gettimeofday(&current_time, NULL);
         // TODO: read the start time from IPC
-        ipc_read();
+        memcpy(&start_time, ipc_ptr, sizeof(start_time));
         // TODO: close IPC
         ipc_close();
         // NOTE: DO NOT ALTER THE LINE BELOW.
